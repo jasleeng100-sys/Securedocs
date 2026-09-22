@@ -1,0 +1,155 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Download Documents</title>
+    <link rel="stylesheet" href="{% static 'cssfolder/csstyle.css' %}">
+    <link rel="stylesheet" href="{% static 'cssfolder/style.css' %}">
+</head>
+  <nav class="navbar">
+        <div class="logo">SecureDocs</div>
+
+        <div class="nav-links">
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'login' %}">Documents</a>
+            <a href="{% url 'contact' %}">Contact</a>
+        </div>
+
+        <div class="auth-buttons">
+         
+            
+            <a href="{% url 'home' %}" class="student-btn">Log Out</a>
+        </div>
+    </nav>
+
+<body>
+
+<div class="header">
+    <h1>📄 Download Documents</h1>
+    <p>Download your uploaded documents</p>
+</div>
+
+    
+
+{% if document %}
+
+<div class="document-list">
+
+    <!-- Aadhar -->
+    <div class="document-card">
+        <h3>Aadhar Card</h3>
+        {% if document.aadhar %}
+            <a href="{{ document.aadhar.url }}" download>
+                <button>Download</button>
+            </a>
+        {% else %}
+            <p>No file uploaded</p>
+        {% endif %}
+    </div>
+
+    <!-- Caste -->
+    <div class="document-card">
+        <h3>Caste Certificate</h3>
+        {% if document.caste %}
+            <a href="{{ document.caste.url }}" download>
+                <button>Download</button>
+            </a>
+        {% else %}
+            <p>No file uploaded</p>
+        {% endif %}
+    </div>
+
+    <!-- 10th -->
+    <div class="document-card">
+        <h3>10th Marksheet</h3>
+        {% if document.tenth %}
+            <a href="{{ document.tenth.url }}" download>
+                <button>Download</button>
+            </a>
+        {% else %}
+            <p>No file uploaded</p>
+        {% endif %}
+    </div>
+
+    <!-- 12th -->
+    <div class="document-card">
+        <h3>+2 Marksheet</h3>
+        {% if document.plus2 %}
+            <a href="{{ document.plus2.url }}" download>
+                <button>Download</button>
+            </a>
+        {% else %}
+            <p>No file uploaded</p>
+        {% endif %}
+    </div>
+
+    <!-- Income -->
+    <div class="document-card">
+        <h3>Income Certificate</h3>
+        {% if document.income %}
+            <a href="{{ document.income.url }}" download>
+                <button>Download</button>
+            </a>
+        {% else %}
+            <p>No file uploaded</p>
+        {% endif %}
+    </div>
+
+    <!-- Mother -->
+    <div class="document-card">
+        <h3>Mother Aadhar</h3>
+        {% if document.mother_aadhar %}
+            <a href="{{ document.mother_aadhar.url }}" download>
+                <button>Download</button>
+            </a>
+        {% else %}
+            <p>No file uploaded</p>
+        {% endif %}
+    </div>
+
+    <!-- Father -->
+    <div class="document-card">
+        <h3>Father Aadhar</h3>
+        {% if document.father_aadhar %}
+            <a href="{{ document.father_aadhar.url }}" download>
+                <button>Download</button>
+            </a>
+        {% else %}
+            <p>No file uploaded</p>
+        {% endif %}
+    </div>
+
+    <!-- Photo (JPG/JPEG) -->
+    <div class="document-card">
+        <h3>Photo</h3>
+        {% if document.photo %}
+            <a href="{{ document.photo.url }}" download>
+                <button>Download Image</button>
+            </a>
+        {% else %}
+            <p>No image uploaded</p>
+        {% endif %}
+    </div>
+
+    <!-- DMC -->
+    <div class="document-card">
+        <h3>DMC</h3>
+        {% if document.dmc %}
+            <a href="{{ document.dmc.url }}" download>
+                <button>Download</button>
+            </a>
+        {% else %}
+            <p>No file uploaded</p>
+        {% endif %}
+    </div>
+
+</div>
+
+
+
+{% else %}
+    <p style="text-align:center; color:red;">No documents found</p>
+{% endif %}
+
+</body>
+</html>

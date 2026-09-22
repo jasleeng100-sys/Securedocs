@@ -1,0 +1,18 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Thank You</title>
+    <link rel="stylesheet" href="{% static 'cssfolder/style.css' %}">
+</head>
+<body class="thankyou-body">
+
+    <div class="thankyou-container">
+        <div class="checkmark">✔</div>
+        <h1>Thank You!</h1>
+        <p>Your submission has been received successfully.</p>
+        <a href="{% url 'home' %}" class="home-btn">Go Back Home</a>
+    </div>
+
+</body>
+</html>

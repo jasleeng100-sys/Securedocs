@@ -1,0 +1,151 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Register - SecureDocs</title>
+
+    <link rel="stylesheet" href="{% static 'cssfolder/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        .error-text {
+            color: red;
+            font-size: 13px;
+            margin-top: 5px;
+            margin-left: 5px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .password-group input {
+            padding-right: 45px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 55%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #333;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<header>
+    <nav class="navbar">
+        <div class="logo">SecureDocs</div>
+
+        <div class="nav-links">
+            <a href="{% url 'home' %}">Home</a>
+            
+            <a href="{% url 'contact' %}">Contact</a>
+        </div>
+
+        <div class="auth-buttons">
+            <a href="{% url 'admin_login' %}" class="admin-btn">Admin Login</a>
+        </div>
+    </nav>
+</header>
+
+<!-- SECTION -->
+<section class="admin-login-section">
+
+    <!-- LEFT -->
+    <div class="admin-info">
+        <h1>Admin Registration</h1>
+        <p>Create a secure admin account to manage system data.</p>
+        <div class="security-badge">🛡 Secure Registration</div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="admin-login-card">
+        <h2>Create Admin</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <!-- NAME -->
+            <div class="input-group">
+                <input type="text" name="name" placeholder="Admin Name"
+                       value="{{ data.name }}" required>
+                {% if error.name %}
+                    <p class="error-text">{{ error.name.0 }}</p>
+                {% endif %}
+            </div>
+
+
+            <!-- PHONE -->
+            <div class="input-group">
+                <input type="text" name="phone" placeholder="Phone Number"
+                       value="{{ data.phone }}" required>
+                {% if error.phone %}
+                    <p class="error-text">{{ error.phone.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- ADMIN ID -->
+            <div class="input-group">
+                <input type="text" name="admin_id" placeholder="Admin ID"
+                       value="{{ data.admin_id }}" required>
+                {% if error.admin_id %}
+                    <p class="error-text">{{ error.admin_id.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- PASSWORD -->
+            <div class="input-group ">
+                <input type="password" name="password" placeholder="Password"
+                       id="pass" required>
+
+                <!-- Font Awesome Eye -->
+                <span class="toggle-password" onclick="togglePassword()">
+                    <i class="fa-solid fa-eye"></i>
+                </span>
+
+                {% if error.password %}
+                    <p class="error-text">{{ error.password.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- BUTTON -->
+            <button type="submit">Register Admin</button>
+        </form>
+
+        <div class="back-home">
+            <a href="{% url 'admin_login' %}">
+                Already have account? Login
+            </a>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- JS -->
+<script>
+function togglePassword() {
+    const pass = document.getElementById("pass");
+    const icon = document.querySelector(".toggle-password i");
+
+    if (pass.type === "password") {
+        pass.type = "text";
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+    } else {
+        pass.type = "password";
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+    }
+}
+</script>
+
+</body>
+</html>

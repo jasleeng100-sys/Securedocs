@@ -1,0 +1,104 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Login - SecureDocs</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'cssfolder/style.css' %}">
+</head>
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<header>
+    <nav class="navbar">
+        <div class="logo">SecureDocs</div>
+
+        <div class="nav-links">
+            <a href="{% url 'home' %}">Home</a>
+            
+            <a href="{% url 'contact' %}">Contact</a>
+        </div>
+
+        <div class="auth-buttons">
+            
+            <a href="{% url 'home' %}" class="student-btn">LogOut</a>
+        </div>
+    </nav>
+</header>
+
+<!-- ================= ADMIN LOGIN SECTION ================= -->
+<section class="admin-login-section">
+
+    <!-- LEFT SIDE -->
+    <div class="admin-info">
+        <h1>Admin Control Panel</h1>
+        <p>
+            Authorized personnel only. Manage users, documents, and system security 
+            from one central dashboard.
+        </p>
+        <div class="security-badge">🔐 Secure Access</div>
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="admin-login-card">
+        <h2>Admin Login</h2>
+
+        <!-- ERROR MESSAGE -->
+        {% if error %}
+            <p style="color:red; text-align:center;">
+                Invalid Admin ID or Password
+            </p>
+        {% endif %}
+
+        <!-- FORM START -->
+        <form method="POST">
+            {% csrf_token %}
+
+            <!-- ADMIN ID -->
+            <div class="input-group">
+                <input type="text" name="admin_id" placeholder="Admin ID" required>
+            </div>
+
+            <!-- PASSWORD -->
+            <div class="input-group password-group">
+                <input type="password" name="password" placeholder="Password" id="adminPassword" required>
+                <span class="toggle-password" onclick="togglePassword()">👁</span>
+            </div>
+
+            <!-- OPTIONS -->
+            <div class="options">
+                <label>
+                    <input type="checkbox" name="remember"> Remember me
+                </label>
+                <a href="#">Forgot Password?</a>
+            </div>
+
+            <!-- SUBMIT BUTTON -->
+            <button type="submit">Login as Admin</button>
+        </form>
+        <!-- FORM END -->
+
+        <!-- BACK BUTTON -->
+        <div class="back-home">
+            <a href="{% url 'home' %}">← Back to Home</a>
+        </div>
+
+    </div>
+
+</section>
+
+
+<script>
+function togglePassword() {
+    const pass = document.getElementById("adminPassword");
+    if (pass.type === "password") {
+        pass.type = "text";
+    } else {
+        pass.type = "password";
+    }
+}
+</script>
+
+</body>
+</html>

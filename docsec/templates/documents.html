@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Document Portal</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'cssfolder/style.css' %}">
+</head>
+<body>
+
+<!-- Background Effects -->
+<div class="bg-shape shape1"></div>
+<div class="bg-shape shape2"></div>
+
+<header class="hero-small">
+    <h1>📂 Student Document Portal</h1>
+    <p>Upload, track and manage your documents easily</p>
+</header>
+
+<div class="doc-container">
+
+    <!-- Upload Card -->
+    <div class="card">
+        <h3>📤 Upload Document</h3>
+        
+    <a href="{% url 'upload' %}">      
+    <button type="button">Upload</button>
+    </a>
+        
+    </div>
+
+    <!-- Download Card -->
+    <div class="card">
+        <h3>📥 Download Document</h3>
+        <a href="{% url 'download' %}">  
+        <button>Download</button>
+        </a>
+    </div>
+
+    <!-- Status Card -->
+    <div class="card">
+        <h3>📊 Check Status</h3>
+         <a href="{% url 'admin_login' %}">  
+        <button onclick="checkStatus()">Check Status</button>
+        <div id="status"></div>
+    </div>
+
+</div>
+
+<!-- JS -->
+<script src="{% static 'javascript/script.js' %}"></script>
+
+</body>
+</html>

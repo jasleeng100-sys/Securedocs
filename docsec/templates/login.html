@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'cssfolder/style.css' %}">
+</head>
+<body>
+    <header>
+    <nav class="navbar">
+        <div class="logo">SecureDocs</div>
+
+        <div class="nav-links">
+            <a href="{% url 'home' %}">Home</a>
+           
+            <a href="{% url 'contact' %}">Contact</a>
+        </div>
+
+        <div class="auth-buttons">
+            <a href="{% url 'home' %}" class="admin-btn">Log out</a>
+            <a href="{% url 'login' %}" class="student-btn">Student Login</a>
+        </div>
+    </nav>
+</header>
+
+<div class="form-container">
+    <h2>Student Login</h2>
+
+    
+    {% if error %}
+        <p style="color:red; text-align:center;">{{ error }}</p>
+    {% endif %}
+    <form method="POST">
+        {% csrf_token %}
+
+        <input type="text" name="first_name" placeholder="Name" required>
+        <input type="text" name="roll" placeholder="Roll Number" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <button type="submit">Login</button>
+    </form>
+
+</div>
+
+</body>
+</html>

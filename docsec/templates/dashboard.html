@@ -1,0 +1,149 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+
+    <link rel="stylesheet" href="{% static 'cssfolder/csstyle.css' %}">
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar">
+    <div class="logo">SecureDocs Admin Dashboard</div>
+    <a href="{% url 'home' %}" class="logout-btn">Logout</a>
+</nav>
+
+<!-- ================= FILTER SECTION ================= -->
+<section class="filter-section">
+    <form method="GET">
+        <div class="filters">
+
+            <!-- YEAR -->
+            <select name="year">
+                <option value="">Year</option>
+                <option value="1st Year">1st Year</option>
+                <option value="2nd Year">2nd Year</option>
+                <option value="3rd Year">3rd Year</option>
+                <option value="4th Year">4th Year</option>
+            </select>
+
+            <!-- BRANCH -->
+            <select name="branch">
+                <option value="">Branch</option>
+                <option value="CSE">CSE</option>
+                <option value="ECE">ECE</option>
+                <option value="ME">ME</option>
+                <option value="CE">CE</option>
+            </select>
+
+            <!-- SEMESTER -->
+            <select name="semester">
+                <option value="">Semester</option>
+                <option value="1st">1st</option>
+                <option value="2nd">2nd</option>
+                <option value="3rd">3rd</option>
+                <option value="4th">4th</option>
+                <option value="5th">5th</option>
+                <option value="6th">6th</option>
+                <option value="7th">7th</option>
+                <option value="8th">8th</option>
+            </select>
+
+            <!-- ROLL -->
+            <input type="text" name="roll" placeholder="Roll No">
+
+            <button type="submit">Search</button>
+
+        </div>
+    </form>
+</section>
+
+<!-- ================= TABLE ================= -->
+<section class="table-section">
+
+<table>
+    <thead>
+        <tr>
+            <th>S.No</th>
+            <th>Roll No</th>
+            <th>Name</th>
+            <th>Mobile</th>
+            <th>Branch</th>
+            <th>Year</th>
+            <th>Semester</th>
+            <th>Documents</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for item in data %}
+        <tr>
+
+            <!-- Student Info -->
+            <td>{{ forloop.counter }}</td>
+            <td>{{ item.student.roll }}</td>
+            <td>{{ item.student.first_name }} {{ item.student.last_name }}</td>
+            <td>{{ item.student.mobile }}</td>
+            <td>{{ item.student.branch }}</td>
+            <td>{{ item.student.year }}</td>
+            <td>{{ item.student.semester }}</td>
+
+            <!-- DOCUMENTS -->
+            <td>
+
+                {% if item.document %}
+
+                    {% if item.document.aadhar %}
+                        <a href="{{ item.document.aadhar.url }}" target="_blank">Aadhar</a><br>
+                    {% endif %}
+
+                    {% if item.document.caste %}
+                        <a href="{{ item.document.caste.url }}" target="_blank">Caste</a><br>
+                    {% endif %}
+
+                    {% if item.document.tenth %}
+                        <a href="{{ item.document.tenth.url }}" target="_blank">10th</a><br>
+                    {% endif %}
+
+                    {% if item.document.plus2 %}
+                        <a href="{{ item.document.plus2.url }}" target="_blank">+2</a><br>
+                    {% endif %}
+
+                    {% if item.document.income %}
+                        <a href="{{ item.document.income.url }}" target="_blank">Income</a><br>
+                    {% endif %}
+
+                    {% if item.document.photo %}
+                        <a href="{{ item.document.photo.url }}" target="_blank">Photo</a><br>
+                    {% endif %}
+
+                    {% if item.document.dmc %}
+                        <a href="{{ item.document.dmc.url }}" target="_blank">DMC</a>
+                    {% endif %}
+
+                {% else %}
+                    <span style="color:red;">No Documents Uploaded</span>
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% empty %}
+        <tr>
+            <td colspan="8">No students found</td>
+        </tr>
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+</section>
+
+</body>
+</html>

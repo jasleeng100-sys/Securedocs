@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contact Us</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'cssfolder/style.css' %}">
+</head>
+<body>
+    <header>
+    <nav class="navbar">
+        <div class="logo">SecureDocs</div>
+
+        <div class="nav-links">
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'contact' %}">Contact</a>
+        </div>
+
+        <div class="auth-buttons">
+            <a href="{% url 'admin_login' %}" class="admin-btn">Admin Login</a>
+            <a href="{% url 'login' %}" class="student-btn">Student Login</a>
+        </div>
+    </nav>
+</header>
+    
+    
+
+
+<!-- Background Shapes -->
+<div class="bg-shape shape1"></div>
+<div class="bg-shape shape2"></div>
+
+<header class="hero-small">
+    <h1>📞 Get In Touch</h1>
+    <p>We would love to hear from you</p>
+</header>
+
+<div class="contact-container">
+
+    <!-- Contact Info -->
+    <div class="contact-info">
+        <h2>Contact Information</h2>
+        <p>📍 IK Gujral Punjab Technical University Amritsar Campus</p>
+        <p>📧 support@studentportal.com</p>
+        <p>📱 +91 78456 17890</p>
+        <p>⏰ Mon - Sat | 9AM - 5PM</p>
+    </div>
+
+    <!-- Contact Form -->
+    <div class="contact-form">
+        <h2>Send Message</h2>
+
+        <!-- Django Form Start -->
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="input-group">
+                <input type="text" name="name" required>
+                <label>Full Name</label>
+            </div>
+
+            <div class="input-group">
+                <input type="email" name="email" required>
+                <label>Email Address</label>
+            </div>
+
+            <div class="input-group">
+                <textarea name="message" rows="4" required></textarea>
+                <label>Your Message</label>
+            </div>
+
+            <button type="submit">Send Message</button>
+        </form>
+
+        <div id="contactStatus"></div>
+    </div>
+
+</div>
+
+<!-- JS -->
+<script src="{% static 'javascript/script.js' %}"></script>
+
+</body>
+</html>

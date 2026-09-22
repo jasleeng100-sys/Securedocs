@@ -1,0 +1,236 @@
+/* ================= GLOBAL RESET ================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* ================= BODY ================= */
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    color: white;
+}
+
+/* ================= HEADER ================= */
+.header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.header h1 {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+.header p {
+    font-size: 16px;
+    opacity: 0.8;
+}
+
+/* ================= DOCUMENT GRID ================= */
+.document-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    width: 100%;
+    max-width: 1200px;
+}
+
+/* ================= CARD STYLE ================= */
+.document-card {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 30px 20px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    transition: 0.4s ease;
+}
+
+/* Hover effect */
+.document-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+}
+
+/* Card title */
+.document-card h3 {
+    margin-bottom: 20px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* Button */
+.document-card button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 25px;
+    background: linear-gradient(90deg, #00c6ff, #0072ff);
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+.file {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 25px;
+    background: linear-gradient(90deg, #00c6ff, #0072ff);
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+/* Button hover */
+.document-card button:hover {
+    opacity: 0.85;
+    transform: scale(1.05);
+}
+
+/* Submit Button */
+.submit-btn {
+    padding: 8px 18px;
+    border: none;
+    border-radius: 25px;
+    background: linear-gradient(90deg, #00c6ff, #0072ff);
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.3s ease;
+     width: auto;
+    display: inline-block;
+
+}
+
+.submit-btn:hover {
+    opacity: 0.9;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 1024px) {
+    .document-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .document-list {
+        grid-template-columns: 1fr;
+    }
+
+    .header h1 {
+        font-size: 28px;
+    }
+
+    .header p {
+        font-size: 14px;
+    }
+
+    .document-card h3 {
+        font-size: 16px;
+    }
+
+    .document-card button {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+}
+
+
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    margin: 0;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 30px;
+    background: rgba(0,0,0,0.3);
+}
+
+.navbar .logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.navbar .logout-btn {
+    color: white;
+    text-decoration: none;
+    padding: 8px 18px;
+    border-radius: 25px;
+    background: #ff416c;
+    transition: 0.3s;
+}
+
+.navbar .logout-btn:hover {
+    background: #ff4b2b;
+}
+
+.filter-section {
+    margin: 20px 30px;
+}
+
+.filters select,
+.filters input {
+    padding: 8px 12px;
+    margin-right: 10px;
+    border-radius: 8px;
+    border: none;
+}
+
+.filters button {
+    padding: 8px 15px;
+    border-radius: 8px;
+    border: none;
+    background: #00c6ff;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.filters button:hover {
+    background: #0072ff;
+}
+
+table {
+    width: 95%;
+    margin: 0 auto 30px auto;
+    border-collapse: collapse;
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 12px;
+    border: 1px solid rgba(255,255,255,0.2);
+    text-align: center;
+}
+
+th {
+    background: rgba(0,0,0,0.3);
+    font-weight: 600;
+}
+
+tr:nth-child(even) {
+    background: rgba(255,255,255,0.05);
+}
+
+@media(max-width:900px){
+    .filters select, .filters input{
+        width: 100%;
+        margin-bottom:10px;
+    }
+}
