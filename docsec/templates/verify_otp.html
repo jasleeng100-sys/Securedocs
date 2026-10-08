@@ -1,0 +1,104 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Verify Email</title>
+
+    <link rel="stylesheet"
+          href="{% static 'cssfolder/style.css' %}">
+</head>
+
+<body>
+
+<header>
+
+    <nav class="navbar">
+
+        <div class="logo">
+            SecureDocs
+        </div>
+
+        <div class="nav-links">
+
+            <a href="{% url 'home' %}">
+                Home
+            </a>
+
+            <a href="{% url 'login' %}">
+                Login
+            </a>
+
+            <a href="{% url 'contact' %}">
+                Contact
+            </a>
+
+        </div>
+
+    </nav>
+
+</header>
+
+
+<div class="form-container">
+
+    <h2>Verify Your Email</h2>
+
+    <p>
+        We sent a 6-digit OTP to:
+    </p>
+
+    <p>
+        <strong>{{ email }}</strong>
+    </p>
+
+
+    {% if error %}
+
+        <p style="color:red;">
+            {{ error }}
+        </p>
+
+    {% endif %}
+
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <input
+            type="text"
+            name="otp"
+            placeholder="Enter 6-digit OTP"
+            maxlength="6"
+            inputmode="numeric"
+            required
+        >
+
+        <button type="submit" class="submit-btn">
+            Verify OTP
+        </button>
+
+    </form>
+
+
+    <br>
+
+
+    <form method="POST"
+          action="{% url 'resend_otp' %}">
+
+        {% csrf_token %}
+
+        <button type="submit">
+            Resend OTP
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+
+</html>

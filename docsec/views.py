@@ -1,3 +1,10 @@
+import secrets
+import time
+
+from django.core.mail import send_mail
+from django.conf import settings
+from django.core.exceptions import ValidationError
+from django.contrib.auth.hashers import make_password, check_password
 from django.shortcuts import render,  redirect
 from .models import Student
 from .models import Document,AdminUser
@@ -29,7 +36,7 @@ def contact(request):
         email = request.POST.get('email')
         message = request.POST.get('message')
 
-        # Save to database (optional but recommended)
+       
         Contact.objects.create(
             name=name,
             email=email,
@@ -53,39 +60,285 @@ def download(request):
 
     return render(request, 'download.html', {'document': document})
 
-
-
 def signup(request):
     error = {}
     form_data = {}
 
     if request.method == "POST":
-        form_data = request.POST
+
+        form_data = {
+            'first_name': request.POST.get('first_name', '').strip(),
+            'f_name': request.POST.get('f_name', '').strip(),
+            'email': request.POST.get('email', '').strip(),
+            'mobile': request.POST.get('mobile', '').strip(),
+            'roll': request.POST.get('roll', '').strip(),
+            'branch': request.POST.get('branch', '').strip(),
+            'year': request.POST.get('year', '').strip(),
+            'semester': request.POST.get('semester', '').strip(),
+        }
 
         try:
+          
             student = Student(
-                first_name=request.POST.get('first_name'),
-                f_name=request.POST.get('f_name'),
-                email=request.POST.get('email'),
-                mobile=request.POST.get('mobile'),
-                roll=request.POST.get('roll'),
-                branch=request.POST.get('branch'),
-                year=request.POST.get('year'),           
-                semester=request.POST.get('semester')   
+                first_name=form_data['first_name'],
+                f_name=form_data['f_name'],
+                email=form_data['email'],
+                mobile=form_data['mobile'],
+                roll=form_data['roll'],
+                branch=form_data['branch'],
+                year=form_data['year'],
+                semester=form_data['semester']
             )
 
+            
             student.full_clean()
-            student.save()
 
-            return redirect('thanqu')
+            # Generate 6-digit OTP
+            otp = str(secrets.randbelow(900000) + 100000)
+
+            # Store registration data temporarily in session
+            request.session['pending_student'] = form_data
+
+            # Store OTP securely as a hash
+            request.session['otp_hash'] = make_password(otp)
+
+            # OTP expires after 5 minutes
+            request.session['otp_expiry'] = time.time() + 300
+
+            # Reset OTP attempts
+            request.session['otp_attempts'] = 0
+
+            request.session.modified = True
+
+            # Send OTP to email
+            send_mail(
+                subject='SecureDocs - Email Verification OTP',
+
+                message=(
+                    f'Hello {form_data["first_name"]},\n\n'
+                    f'Your SecureDocs verification OTP is: {otp}\n\n'
+                    f'This OTP is valid for 5 minutes.\n\n'
+                    f'If you did not request this registration, '
+                    f'please ignore this email.'
+                ),
+
+                from_email=settings.DEFAULT_FROM_EMAIL,
+
+                recipient_list=[
+                    form_data['email']
+                ],
+
+                fail_silently=False,
+            )
+
+            # Go to OTP verification page
+            return redirect('verify_otp')
 
         except ValidationError as e:
+
             error = e.message_dict
+
+        except Exception:
+
+            error = {
+                'email': [
+                    'Unable to send OTP. Please try again.'
+                ]
+            }
 
     return render(request, 'signup.html', {
         'error': error,
         'form_data': form_data
     })
+
+
+
+def verify_otp(request):
+
+    # Get temporary registration information
+    pending_student = request.session.get('pending_student')
+
+    # If no registration is waiting for verification
+    if not pending_student:
+        return redirect('signup')
+
+    error = ""
+
+    if request.method == "POST":
+
+        entered_otp = request.POST.get('otp', '').strip()
+
+        # Check OTP is entered
+        if not entered_otp:
+
+            error = "Please enter the OTP."
+
+        else:
+
+            # Get OTP expiry time
+            otp_expiry = request.session.get(
+                'otp_expiry',
+                0
+            )
+
+            # Check OTP expiration
+            if time.time() > otp_expiry:
+
+                error = "OTP has expired. Please request a new OTP."
+
+            else:
+
+                # Get number of attempts
+                attempts = request.session.get(
+                    'otp_attempts',
+                    0
+                )
+
+                # Maximum 5 attempts
+                if attempts >= 5:
+
+                    error = (
+                        "Too many incorrect attempts. "
+                        "Please request a new OTP."
+                    )
+
+                else:
+
+                    # Increase attempt count
+                    request.session['otp_attempts'] = attempts + 1
+
+                    otp_hash = request.session.get('otp_hash')
+
+                    # Check OTP
+                    if otp_hash and check_password(
+                        entered_otp,
+                        otp_hash
+                    ):
+
+                        try:
+
+                            # NOW create the Student
+                            student = Student(
+                                first_name=pending_student['first_name'],
+                                f_name=pending_student['f_name'],
+                                email=pending_student['email'],
+                                mobile=pending_student['mobile'],
+                                roll=pending_student['roll'],
+                                branch=pending_student['branch'],
+                                year=pending_student['year'],
+                                semester=pending_student['semester']
+                            )
+
+                            # Validate again before saving
+                            student.full_clean()
+
+                            # Save student to database
+                            student.save()
+
+                            # Remove temporary session data
+                            request.session.pop(
+                                'pending_student',
+                                None
+                            )
+
+                            request.session.pop(
+                                'otp_hash',
+                                None
+                            )
+
+                            request.session.pop(
+                                'otp_expiry',
+                                None
+                            )
+
+                            request.session.pop(
+                                'otp_attempts',
+                                None
+                            )
+
+                            # Registration successful
+                            return redirect('thanqu')
+
+                        except ValidationError:
+
+                            error = (
+                                "Registration information is "
+                                "no longer valid."
+                            )
+
+                    else:
+
+                        remaining = 4 - attempts
+
+                        if remaining > 0:
+                            error = (
+                                f"Invalid OTP. "
+                                f"You have {remaining} "
+                                f"attempt(s) remaining."
+                            )
+                        else:
+                            error = (
+                                "Invalid OTP. "
+                                "Please request a new OTP."
+                            )
+
+    return render(
+        request,
+        'verify_otp.html',
+        {
+            'error': error,
+            'email': pending_student.get('email')
+        }
+    )
+
+
+def resend_otp(request):
+
+    pending_student = request.session.get('pending_student')
+
+    if not pending_student:
+        return redirect('signup')
+
+    if request.method == "POST":
+
+        # Generate new 6-digit OTP
+        otp = str(secrets.randbelow(900000) + 100000)
+
+        # Save new OTP
+        request.session['otp_hash'] = make_password(otp)
+
+        # New 5-minute expiry
+        request.session['otp_expiry'] = time.time() + 300
+
+        # Reset attempts
+        request.session['otp_attempts'] = 0
+
+        request.session.modified = True
+
+        try:
+
+            send_mail(
+                subject='SecureDocs - New OTP',
+                message=(
+                    f'Hello {pending_student["first_name"]},\n\n'
+                    f'Your new SecureDocs verification OTP is: {otp}\n\n'
+                    f'This OTP will expire in 5 minutes.'
+                ),
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[pending_student['email']],
+                fail_silently=False,
+            )
+
+            return redirect('verify_otp')
+
+        except Exception:
+            return render(request, 'verify_otp.html', {
+                'error': 'Unable to send OTP. Please try again.',
+                'email': pending_student.get('email')
+            })
+
+    return redirect('verify_otp')
+
 def login(request):
     error = ""
 
