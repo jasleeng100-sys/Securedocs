@@ -30,6 +30,7 @@ ALLOWED_HOSTS = [
 '127.0.0.1',
 'localhost',
 'securedocs-3wpx.onrender.com',
+'securedocs-2.onrender.com',
 ]
 
 # Application definition
