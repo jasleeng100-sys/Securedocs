@@ -16,10 +16,6 @@ urlpatterns = [
     path('register_admin.html', views.register_admin, name='register_admin'),
     path('prvdown.html', views.prvdown, name='prvdown'),
     path('admin_view.html',views.admin_view, name='admin_view'),
-    path('verify-otp.html', views.verify_otp, name='verify_otp'),
-
-    path('resend-otp.html', views.resend_otp, name='resend_otp'),
-   
-   
+  
     
 ]
